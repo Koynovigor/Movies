@@ -11,6 +11,7 @@ object MovieMapper {
         id = dto.id,
         title = dto.title,
         posterPath = dto.posterPath,
+        backdropPath = dto.backdropPath,
         overview = dto.overview,
         voteAverage = dto.voteAverage
     )
@@ -21,6 +22,7 @@ object MovieMapper {
         id = entity.id,
         title = entity.title,
         posterPath = entity.posterPath,
+        backdropPath = entity.backdropPath,
         overview = entity.overview,
         voteAverage = entity.voteAverage
     )
@@ -33,6 +35,7 @@ object MovieMapper {
         id = movie.id,
         title = movie.title,
         posterPath = movie.posterPath,
+        backdropPath = movie.backdropPath,
         overview = movie.overview,
         voteAverage = movie.voteAverage,
         category = category,

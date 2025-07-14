@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.glide)
     ksp(libs.compiler)
+    implementation(libs.gms.ads)
 
     // Room
     implementation(libs.androidx.room.runtime)

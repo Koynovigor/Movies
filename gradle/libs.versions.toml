@@ -21,6 +21,7 @@ retrofit = "3.0.0"
 okhttp = "5.1.0"
 room = "2.7.2"
 viewpager2 = "1.1.0"
+gmsAds = "24.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +55,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+gms-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gmsAds" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

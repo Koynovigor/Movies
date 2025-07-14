@@ -8,6 +8,7 @@ data class MovieDto(
     val id: Long,
     val title: String,
     @SerialName("poster_path") val posterPath: String? = null,
+    @SerialName("backdrop_path") val backdropPath: String? = null,
     val overview: String,
     @SerialName("vote_average") val voteAverage: Double
 )

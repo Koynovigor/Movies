@@ -23,7 +23,9 @@ object DatabaseModule {
             context,
             MoviesDatabase::class.java,
             "movies.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
 
     @Provides
     @Singleton

@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.ItemMovieBinding
 import com.l3on1kl.movies.domain.model.Movie
+import com.l3on1kl.movies.util.TmdbConfigHolder
+import com.l3on1kl.movies.util.toPosterUrl
 
 class MovieAdapter :
     ListAdapter<Movie, MovieAdapter.MovieViewHolder>(Diff) {
@@ -45,12 +48,22 @@ class MovieAdapter :
     class MovieViewHolder(
         private val itemViewBinding: ItemMovieBinding
     ) : RecyclerView.ViewHolder(itemViewBinding.root) {
-        fun bind(
-            movieData: Movie
-        ) {
-            itemViewBinding.title.text = movieData.title
+
+        fun bind(movie: Movie) {
+            itemViewBinding.title.text = movie.title
+
+            val url = movie.posterPath.toPosterUrl(
+                TmdbConfigHolder.imagesConfig
+            )
+                ?: movie.backdropPath.toPosterUrl(
+                    TmdbConfigHolder.imagesConfig
+                )
+                ?: R.drawable.ic_poster_placeholder
+
             Glide.with(itemViewBinding.poster)
-                .load("https://image.tmdb.org/t/p/w500${movieData.posterPath}")
+                .load(url)
+                .placeholder(R.drawable.ic_poster_placeholder)
+                .error(R.drawable.ic_poster_placeholder)
                 .into(itemViewBinding.poster)
         }
     }

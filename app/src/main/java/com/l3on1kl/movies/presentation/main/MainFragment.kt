@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdRequest
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
 import com.l3on1kl.movies.domain.model.MovieCategory
@@ -34,6 +35,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.recyclerView.adapter = categoryAdapter
 
+        binding.adView.loadAd(AdRequest.Builder().build())
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(
                 Lifecycle.State.STARTED
@@ -55,7 +58,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.VISIBLE
         errorGroup.visibility = View.GONE
         recyclerView.visibility = View.GONE
-        bannerImage.visibility = View.GONE
+        adView.visibility = View.GONE
     }
 
     private fun setData(
@@ -64,7 +67,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.GONE
         errorGroup.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-        bannerImage.visibility = View.VISIBLE
+        adView.visibility = View.VISIBLE
         categoryAdapter.submitList(state.categories)
     }
 
@@ -74,7 +77,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.GONE
         errorGroup.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        bannerImage.visibility = View.GONE
+        adView.visibility = View.GONE
         errorText.text = errorMessage
 
         Log.e("MainFragment", errorMessage)
