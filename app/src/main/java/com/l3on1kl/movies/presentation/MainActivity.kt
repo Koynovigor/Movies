@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
         val rootView = findViewById<View>(R.id.main)
         ViewCompat.setOnApplyWindowInsetsListener(rootView) { view, insets ->
             val systemBars = insets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
+                WindowInsetsCompat.Type.systemBars() or
+                        WindowInsetsCompat.Type.displayCutout()
             )
             view.updatePadding(
                 left = systemBars.left,

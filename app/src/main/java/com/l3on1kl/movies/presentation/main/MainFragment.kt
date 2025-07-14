@@ -31,6 +31,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             LinearLayoutManager(requireContext())
 
         binding.recyclerView.adapter = categoryAdapter
+        binding.recyclerView.itemAnimator = null
 
         binding.adView.loadAd(AdRequest.Builder().build())
 

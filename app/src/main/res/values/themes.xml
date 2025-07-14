@@ -9,7 +9,6 @@
         <item name="colorOnSecondary">@color/onSecondary</item>
         <item name="colorSecondaryContainer">@color/secondaryContainer</item>
         <item name="colorOnSecondaryContainer">@color/onSecondaryContainer</item>
-        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.Movies" parent="Base.Theme.Movies" />
