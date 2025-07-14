@@ -1,24 +1,28 @@
 package com.l3on1kl.movies.presentation.main
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.l3on1kl.movies.domain.model.MovieCategory
 import com.l3on1kl.movies.domain.usecase.GetCategoriesUseCase
 import com.l3on1kl.movies.domain.usecase.GetMoviesUseCase
+import com.l3on1kl.movies.util.ErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val app: Application,
     private val getMovies: GetMoviesUseCase,
     private val getCategories: GetCategoriesUseCase
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     private val _state = MutableStateFlow<UiState>(UiState.Loading)
     val state: StateFlow<UiState> = _state.asStateFlow()
@@ -55,7 +59,7 @@ class MainViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 _state.value = UiState.Error(
-                    e.localizedMessage ?: "Unexpected error"
+                    ErrorMapper.map(e, app)
                 )
             }
         }
@@ -69,7 +73,11 @@ class MainViewModel @Inject constructor(
             getMovies(
                 category,
                 next
-            ).collect { list ->
+            ).catch { error ->
+                _state.value = UiState.Error(
+                    ErrorMapper.map(error, app)
+                )
+            }.collect { list ->
                 val current =
                     (_state.value as? UiState.Success) ?: return@collect
 

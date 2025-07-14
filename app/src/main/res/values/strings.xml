@@ -7,4 +7,8 @@
     <string name="retry">Повторить</string>
     <string name="unexpected_error">Unexpected error</string>
     <string name="movie_poster">Постер</string>
+
+    <string name="error_no_internet">Нет подключения к интернету</string>
+    <string name="error_timeout">Превышено время ожидания ответа от сервера</string>
+    <string name="error_network">Ошибка сети</string>
 </resources>

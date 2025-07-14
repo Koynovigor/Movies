@@ -16,6 +16,7 @@ class CategoryAdapter(
 ) : ListAdapter<CategoryState, CategoryAdapter.CategoryViewHolder>(Diff) {
 
     private val scrollStates = mutableMapOf<Int, Parcelable?>()
+    private val lastRequests = mutableMapOf<Int, Int>()
 
     init {
         setHasStableIds(true)
@@ -94,8 +95,15 @@ class CategoryAdapter(
                     ) {
                         currentCategory?.let { category ->
                             scrollStates[category.id] = layoutManager.onSaveInstanceState()
-                            if (!recyclerView.canScrollHorizontally(1)) {
-                                loadNext(category)
+
+                            val lastVisible = layoutManager.findLastVisibleItemPosition()
+                            val total = adapter.itemCount
+                            if (lastVisible >= total - PREFETCH_THRESHOLD) {
+                                val lastReq = lastRequests[category.id] ?: -1
+                                if (total > lastReq) {
+                                    lastRequests[category.id] = total
+                                    loadNext(category)
+                                }
                             }
                         }
                     }
@@ -119,5 +127,9 @@ class CategoryAdapter(
         }
 
         fun getScrollState(): Parcelable? = layoutManager.onSaveInstanceState()
+    }
+
+    private companion object {
+        const val PREFETCH_THRESHOLD = 10
     }
 }
