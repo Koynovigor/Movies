@@ -9,9 +9,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
-import com.l3on1kl.movies.domain.model.Movie
+import com.l3on1kl.movies.domain.model.MovieCategory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -22,13 +23,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         FragmentMainBinding.bind(requireView())
     }
     private val viewModel by viewModels<MainViewModel>()
-    private val adapter = MovieAdapter()
+    private val bannerAdapter = BannerAdapter()
+    private val categoryAdapter = CategoryAdapter { name ->
+        viewModel.loadNextPage(
+            MovieCategory.valueOf(name)
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.recyclerView.layoutManager = LinearLayoutManager(
-            requireContext()
-        )
-        binding.recyclerView.adapter = adapter
+        binding.bannerPager.adapter = bannerAdapter
+        binding.bannerPager.orientation =
+            ViewPager2.ORIENTATION_HORIZONTAL
+
+        binding.recyclerView.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        binding.recyclerView.adapter = categoryAdapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(
@@ -38,7 +48,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     when (state) {
                         UiState.Loading -> setLoading()
 
-                        is UiState.Success -> setData(state.movies)
+                        is UiState.Success -> setData(state)
 
                         is UiState.Error -> setError(state.message)
                     }
@@ -51,15 +61,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.VISIBLE
         errorGroup.visibility = View.GONE
         recyclerView.visibility = View.GONE
+        bannerPager.visibility = View.GONE
     }
 
     private fun setData(
-        movies: List<Movie>
+        state: UiState.Success
     ) = with(binding) {
         progressBar.visibility = View.GONE
         errorGroup.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-        adapter.submitList(movies)
+        bannerPager.visibility = View.VISIBLE
+        bannerAdapter.submitList(state.banner)
+        categoryAdapter.submitList(state.categories)
     }
 
     private fun setError(
@@ -68,6 +81,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.GONE
         errorGroup.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
+        bannerPager.visibility = View.GONE
         errorText.text = errorMessage
 
         Log.e("MainFragment", errorMessage)
