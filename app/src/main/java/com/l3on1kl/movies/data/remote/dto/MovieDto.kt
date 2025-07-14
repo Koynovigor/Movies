@@ -1,19 +1,16 @@
 package com.l3on1kl.movies.data.remote.dto
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class MovieDto(
     val id: Long,
     val title: String,
-    @SerialName("poster_path") val posterPath: String? = null,
-    @SerialName("backdrop_path") val backdropPath: String? = null,
+    @SerializedName("poster_path") val posterPath: String? = null,
+    @SerializedName("backdrop_path") val backdropPath: String? = null,
     val overview: String,
-    @SerialName("vote_average") val voteAverage: Double
+    @SerializedName("vote_average") val voteAverage: Double
 )
 
-@Serializable
 data class MoviesPageDto(
     val page: Int,
     val results: List<MovieDto>

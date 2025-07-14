@@ -64,6 +64,7 @@ class MovieAdapter :
                 .load(url)
                 .placeholder(R.drawable.ic_poster_placeholder)
                 .error(R.drawable.ic_poster_placeholder)
+                .centerCrop()
                 .into(itemViewBinding.poster)
         }
     }
