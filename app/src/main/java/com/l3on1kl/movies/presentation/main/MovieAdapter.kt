@@ -50,7 +50,7 @@ class MovieAdapter :
         ) {
             itemViewBinding.title.text = movieData.title
             Glide.with(itemViewBinding.poster)
-                .load("https://image.tmdb.org/t/p/w342${movieData.posterPath}")
+                .load("https://image.tmdb.org/t/p/w500${movieData.posterPath}")
                 .into(itemViewBinding.poster)
         }
     }

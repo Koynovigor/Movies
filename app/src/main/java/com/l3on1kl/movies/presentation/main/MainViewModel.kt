@@ -35,11 +35,6 @@ class MainViewModel @Inject constructor(
         loadJob = viewModelScope.launch {
             _state.value = UiState.Loading
             try {
-                val bannerMovies = getMovies(
-                    MovieCategory.POPULAR,
-                    1
-                ).first()
-
                 val catStates = categories.map { cat ->
                     val movies = getMovies(
                         cat,
@@ -50,7 +45,6 @@ class MainViewModel @Inject constructor(
                 }
 
                 _state.value = UiState.Success(
-                    bannerMovies.take(5),
                     catStates
                 )
             } catch (e: Exception) {

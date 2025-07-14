@@ -22,27 +22,11 @@ class MoviesRepositoryImpl @Inject constructor(
         category: MovieCategory,
         page: Int
     ): Flow<List<Movie>> = flow {
-        val result = when (category) {
-            MovieCategory.POPULAR -> api.getPopularMovies(
-                BuildConfig.TMDB_API_KEY,
-                page
-            )
-
-            MovieCategory.NOW_PLAYING -> api.getNowPlayingMovies(
-                BuildConfig.TMDB_API_KEY,
-                page
-            )
-
-            MovieCategory.TOP_RATED -> api.getTopRatedMovies(
-                BuildConfig.TMDB_API_KEY,
-                page
-            )
-
-            MovieCategory.UPCOMING -> api.getUpcomingMovies(
-                BuildConfig.TMDB_API_KEY,
-                page
-            )
-        }
+        val result = api.discoverMovies(
+            BuildConfig.TMDB_API_KEY,
+            page,
+            category.id
+        )
 
         dao.clearCategoryPage(
             category.name,

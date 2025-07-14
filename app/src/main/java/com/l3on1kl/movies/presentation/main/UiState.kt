@@ -7,7 +7,6 @@ sealed interface UiState {
     object Loading : UiState
 
     data class Success(
-        val banner: List<Movie>,
         val categories: List<CategoryState>
     ) : UiState
 

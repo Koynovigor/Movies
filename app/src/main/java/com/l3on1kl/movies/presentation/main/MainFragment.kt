@@ -9,7 +9,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
 import com.l3on1kl.movies.domain.model.MovieCategory
@@ -23,7 +22,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         FragmentMainBinding.bind(requireView())
     }
     private val viewModel by viewModels<MainViewModel>()
-    private val bannerAdapter = BannerAdapter()
     private val categoryAdapter = CategoryAdapter { name ->
         viewModel.loadNextPage(
             MovieCategory.valueOf(name)
@@ -31,10 +29,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.bannerPager.adapter = bannerAdapter
-        binding.bannerPager.orientation =
-            ViewPager2.ORIENTATION_HORIZONTAL
-
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext())
 
@@ -61,7 +55,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.VISIBLE
         errorGroup.visibility = View.GONE
         recyclerView.visibility = View.GONE
-        bannerPager.visibility = View.GONE
+        bannerImage.visibility = View.GONE
     }
 
     private fun setData(
@@ -70,8 +64,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.GONE
         errorGroup.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-        bannerPager.visibility = View.VISIBLE
-        bannerAdapter.submitList(state.banner)
+        bannerImage.visibility = View.VISIBLE
         categoryAdapter.submitList(state.categories)
     }
 
@@ -81,7 +74,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         progressBar.visibility = View.GONE
         errorGroup.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        bannerPager.visibility = View.GONE
+        bannerImage.visibility = View.GONE
         errorText.text = errorMessage
 
         Log.e("MainFragment", errorMessage)
