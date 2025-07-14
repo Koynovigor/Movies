@@ -29,7 +29,7 @@ object MovieMapper {
 
     fun toEntity(
         movie: Movie,
-        category: String,
+        categoryId: Int,
         page: Int
     ) = MovieEntity(
         id = movie.id,
@@ -38,7 +38,7 @@ object MovieMapper {
         backdropPath = movie.backdropPath,
         overview = movie.overview,
         voteAverage = movie.voteAverage,
-        category = category,
+        categoryId = categoryId,
         page = page
     )
 }

@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.l3on1kl.movies.databinding.ItemCategoryBinding
+import com.l3on1kl.movies.domain.model.MovieCategory
 
 class CategoryAdapter(
-    private val loadNext: (category: String) -> Unit
+    private val loadNext: (category: MovieCategory) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
     private val items = mutableListOf<CategoryState>()
@@ -43,11 +44,12 @@ class CategoryAdapter(
 
     class CategoryViewHolder(
         private val binding: ItemCategoryBinding,
-        private val loadNext: (category: String) -> Unit
+        private val loadNext: (category: MovieCategory) -> Unit
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
         private val adapter = MovieAdapter()
+        private var currentCategory: MovieCategory? = null
 
         init {
             binding.moviesRecycler.layoutManager =
@@ -66,9 +68,7 @@ class CategoryAdapter(
                         dy: Int
                     ) {
                         if (!recyclerView.canScrollHorizontally(1)) {
-                            loadNext(
-                                binding.categoryTitle.tag as String
-                            )
+                            currentCategory?.let(loadNext)
                         }
                     }
                 }
@@ -79,7 +79,7 @@ class CategoryAdapter(
             state: CategoryState
         ) {
             binding.categoryTitle.text = state.category.title
-            binding.categoryTitle.tag = state.category.name
+            currentCategory = state.category
             adapter.submitList(state.movies)
         }
     }

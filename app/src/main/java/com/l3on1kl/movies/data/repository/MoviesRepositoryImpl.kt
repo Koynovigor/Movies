@@ -36,6 +36,15 @@ class MoviesRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getCategories(): Flow<List<MovieCategory>> = flow {
+        val result = api.getGenres(BuildConfig.TMDB_API_KEY)
+        emit(
+            result.genres.map {
+                MovieCategory(it.id, it.name)
+            }
+        )
+    }
+
     override fun getMovies(
         category: MovieCategory,
         page: Int
@@ -49,14 +58,14 @@ class MoviesRepositoryImpl @Inject constructor(
         )
 
         dao.clearCategoryPage(
-            category.name,
+            category.id,
             page
         )
 
         dao.insertAll(result.results.map {
             MovieMapper.toEntity(
                 MovieMapper.fromDto(it),
-                category.name,
+                category.id,
                 page
             )
         })
@@ -68,7 +77,7 @@ class MoviesRepositoryImpl @Inject constructor(
         )
     }.catch {
         val cached = dao.getByCategory(
-            category.name
+            category.id
         )
 
         if (cached.isNotEmpty()) {

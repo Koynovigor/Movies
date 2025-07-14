@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
-import com.l3on1kl.movies.domain.model.MovieCategory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,10 +22,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         FragmentMainBinding.bind(requireView())
     }
     private val viewModel by viewModels<MainViewModel>()
-    private val categoryAdapter = CategoryAdapter { name ->
-        viewModel.loadNextPage(
-            MovieCategory.valueOf(name)
-        )
+    private val categoryAdapter = CategoryAdapter { category ->
+        viewModel.loadNextPage(category)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

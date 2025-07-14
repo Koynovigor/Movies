@@ -3,6 +3,7 @@ package com.l3on1kl.movies.presentation.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.l3on1kl.movies.domain.model.MovieCategory
+import com.l3on1kl.movies.domain.usecase.GetCategoriesUseCase
 import com.l3on1kl.movies.domain.usecase.GetMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getMovies: GetMoviesUseCase
+    private val getMovies: GetMoviesUseCase,
+    private val getCategories: GetCategoriesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<UiState>(UiState.Loading)
@@ -27,18 +29,22 @@ class MainViewModel @Inject constructor(
         refresh()
     }
 
-    private val categories = MovieCategory.entries
-    private val pages = categories.associateWith { 1 }.toMutableMap()
+    private var categories: List<MovieCategory> = emptyList()
+    private val pages = mutableMapOf<Int, Int>()
 
     fun refresh() {
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             _state.value = UiState.Loading
             try {
+                categories = getCategories().first()
+                pages.clear()
+                categories.forEach { pages[it.id] = 1 }
+
                 val catStates = categories.map { cat ->
                     val movies = getMovies(
                         cat,
-                        pages[cat] ?: 1
+                        pages[cat.id] ?: 1
                     ).first()
 
                     CategoryState(cat, movies)
@@ -56,8 +62,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadNextPage(category: MovieCategory) {
-        val next = (pages[category] ?: 1) + 1
-        pages[category] = next
+        val next = (pages[category.id] ?: 1) + 1
+        pages[category.id] = next
+
         viewModelScope.launch {
             getMovies(
                 category,
@@ -67,7 +74,7 @@ class MainViewModel @Inject constructor(
                     (_state.value as? UiState.Success) ?: return@collect
 
                 val updated = current.categories.map {
-                    if (it.category == category) {
+                    if (it.category.id == category.id) {
                         it.copy(
                             movies = it.movies + list
                         )

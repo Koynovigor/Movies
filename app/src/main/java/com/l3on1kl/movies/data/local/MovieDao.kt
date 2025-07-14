@@ -7,9 +7,9 @@ import androidx.room.Query
 
 @Dao
 interface MovieDao {
-    @Query("SELECT * FROM movies WHERE category = :category ORDER BY page, id")
+    @Query("SELECT * FROM movies WHERE categoryId = :categoryId ORDER BY page, id")
     suspend fun getByCategory(
-        category: String
+        categoryId: Int
     ): List<MovieEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -17,9 +17,9 @@ interface MovieDao {
         movies: List<MovieEntity>
     )
 
-    @Query("DELETE FROM movies WHERE category = :category AND page = :page")
+    @Query("DELETE FROM movies WHERE categoryId = :categoryId AND page = :page")
     suspend fun clearCategoryPage(
-        category: String,
+        categoryId: Int,
         page: Int
     )
 }
