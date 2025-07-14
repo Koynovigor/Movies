@@ -1,26 +1,36 @@
 package com.l3on1kl.movies.presentation.main
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.l3on1kl.movies.databinding.ItemCategoryBinding
 import com.l3on1kl.movies.domain.model.MovieCategory
 
 class CategoryAdapter(
     private val loadNext: (category: MovieCategory) -> Unit
-) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
+) : ListAdapter<CategoryState, CategoryAdapter.CategoryViewHolder>(Diff) {
 
-    private val items = mutableListOf<CategoryState>()
+    init {
+        setHasStableIds(true)
+    }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun submitList(
-        list: List<CategoryState>
-    ) {
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
+    override fun getItemId(
+        position: Int
+    ) = getItem(position).category.id.toLong()
+
+    object Diff : DiffUtil.ItemCallback<CategoryState>() {
+        override fun areItemsTheSame(
+            oldItem: CategoryState,
+            newItem: CategoryState
+        ) = oldItem.category.id == newItem.category.id
+
+        override fun areContentsTheSame(
+            oldItem: CategoryState,
+            newItem: CategoryState
+        ) = oldItem == newItem
     }
 
     override fun onCreateViewHolder(
@@ -35,12 +45,10 @@ class CategoryAdapter(
         loadNext
     )
 
-    override fun getItemCount() = items.size
-
     override fun onBindViewHolder(
         holder: CategoryViewHolder,
         position: Int
-    ) = holder.bind(items[position])
+    ) = holder.bind(getItem(position))
 
     class CategoryViewHolder(
         private val binding: ItemCategoryBinding,

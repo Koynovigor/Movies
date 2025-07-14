@@ -12,9 +12,18 @@ import com.l3on1kl.movies.databinding.ItemMovieBinding
 import com.l3on1kl.movies.domain.model.Movie
 import com.l3on1kl.movies.util.TmdbConfigHolder
 import com.l3on1kl.movies.util.toPosterUrl
+import java.util.Locale
 
 class MovieAdapter :
     ListAdapter<Movie, MovieAdapter.MovieViewHolder>(Diff) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(
+        position: Int
+    ) = getItem(position).id
 
     object Diff : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(
@@ -52,6 +61,12 @@ class MovieAdapter :
 
         fun bind(movie: Movie) {
             itemViewBinding.title.text = movie.title
+
+            itemViewBinding.rating.text = String.format(
+                Locale.US,
+                "%.1f",
+                movie.voteAverage
+            )
 
             val url = movie.posterPath.toPosterUrl(
                 TmdbConfigHolder.imagesConfig

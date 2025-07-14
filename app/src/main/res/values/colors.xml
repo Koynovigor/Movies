@@ -3,4 +3,19 @@
     <color name="black">#FF000000</color>
     <color name="grey">#FF808080</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="chipBackgroundColor">#8079747E</color>
+
+    <color name="primary">#9B45B4</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryContainer">#F8D9FF</color>
+    <color name="onPrimaryContainer">#36003D</color>
+    <color name="secondary">#6A4EA8</color>
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#88E8DDFF</color>
+    <color name="onSecondaryContainer">#25005C</color>
+    <color name="background">#FFFBFE</color>
+    <color name="onBackground">#1C1B1F</color>
+    <color name="surface">#FFFBFE</color>
+    <color name="onSurface">#1C1B1F</color>
+    <color name="outline">#79747E</color>
 </resources>

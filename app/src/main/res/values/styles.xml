@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MoviesCardShape" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="Widget.Movies.RatingChip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipBackgroundColor">@color/chipBackgroundColor</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Movies.Rating</item>
+        <item name="chipIconSize">14sp</item>
+        <item name="chipIconTint">?attr/colorOnPrimaryContainer</item>
+    </style>
+
+    <style name="TextAppearance.Movies.Rating" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+    </style>
+
+    <style name="TextAppearance.Movies.Title" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

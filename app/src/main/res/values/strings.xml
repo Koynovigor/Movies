@@ -6,4 +6,5 @@
     <string name="error_placeholder">Ошибка</string>
     <string name="retry">Повторить</string>
     <string name="unexpected_error">Unexpected error</string>
+    <string name="movie_poster">Постер</string>
 </resources>
