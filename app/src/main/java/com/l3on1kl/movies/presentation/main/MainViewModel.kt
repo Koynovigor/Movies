@@ -55,7 +55,7 @@ class MainViewModel @Inject constructor(
                 )
             } catch (e: Exception) {
                 _state.value = UiState.Error(
-                    e.message ?: "Unexpected error"
+                    e.localizedMessage ?: "Unexpected error"
                 )
             }
         }
