@@ -20,7 +20,7 @@
     </style>
 
     <style name="TextAppearance.Movies.Title" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:textStyle">bold</item>
     </style>
 </resources>

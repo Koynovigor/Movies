@@ -12,6 +12,7 @@ import com.l3on1kl.movies.util.TmdbConfigHolder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -40,7 +41,16 @@ class MoviesRepositoryImpl @Inject constructor(
         val result = api.getGenres(BuildConfig.TMDB_API_KEY)
         emit(
             result.genres.map {
-                MovieCategory(it.id, it.name)
+                MovieCategory(
+                    it.id,
+                    it.name.replaceFirstChar { char ->
+                        if (char.isLowerCase()) {
+                            char.titlecase(Locale.getDefault())
+                        } else {
+                            char.toString()
+                        }
+                    }
+                )
             }
         )
     }

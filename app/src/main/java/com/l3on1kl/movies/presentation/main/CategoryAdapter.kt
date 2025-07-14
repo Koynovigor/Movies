@@ -1,5 +1,6 @@
 package com.l3on1kl.movies.presentation.main
 
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,10 +9,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.l3on1kl.movies.databinding.ItemCategoryBinding
 import com.l3on1kl.movies.domain.model.MovieCategory
+import java.util.Locale
 
 class CategoryAdapter(
     private val loadNext: (category: MovieCategory) -> Unit
 ) : ListAdapter<CategoryState, CategoryAdapter.CategoryViewHolder>(Diff) {
+
+    private val scrollStates = mutableMapOf<Int, Parcelable?>()
 
     init {
         setHasStableIds(true)
@@ -48,25 +52,38 @@ class CategoryAdapter(
     override fun onBindViewHolder(
         holder: CategoryViewHolder,
         position: Int
-    ) = holder.bind(getItem(position))
+    ) {
+        val item = getItem(position)
+        holder.bind(item, scrollStates[item.category.id])
+    }
 
-    class CategoryViewHolder(
+    override fun onViewRecycled(holder: CategoryViewHolder) {
+        holder.currentCategory?.let { category ->
+            scrollStates[category.id] = holder.getScrollState()
+        }
+        super.onViewRecycled(holder)
+    }
+
+    inner class CategoryViewHolder(
         private val binding: ItemCategoryBinding,
         private val loadNext: (category: MovieCategory) -> Unit
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
         private val adapter = MovieAdapter()
-        private var currentCategory: MovieCategory? = null
+        private val layoutManager = LinearLayoutManager(
+            binding.root.context,
+            RecyclerView.HORIZONTAL,
+            false
+        )
+        var currentCategory: MovieCategory? = null
+            private set
 
         init {
-            binding.moviesRecycler.layoutManager =
-                LinearLayoutManager(
-                    binding.root.context,
-                    RecyclerView.HORIZONTAL,
-                    false
-                )
+            binding.moviesRecycler.layoutManager = layoutManager
             binding.moviesRecycler.adapter = adapter
+
+            binding.moviesRecycler.itemAnimator = null
 
             binding.moviesRecycler.addOnScrollListener(
                 object : RecyclerView.OnScrollListener() {
@@ -75,8 +92,11 @@ class CategoryAdapter(
                         dx: Int,
                         dy: Int
                     ) {
-                        if (!recyclerView.canScrollHorizontally(1)) {
-                            currentCategory?.let(loadNext)
+                        currentCategory?.let { category ->
+                            scrollStates[category.id] = layoutManager.onSaveInstanceState()
+                            if (!recyclerView.canScrollHorizontally(1)) {
+                                loadNext(category)
+                            }
                         }
                     }
                 }
@@ -84,11 +104,20 @@ class CategoryAdapter(
         }
 
         fun bind(
-            state: CategoryState
+            state: CategoryState,
+            savedState: Parcelable?
         ) {
-            binding.categoryTitle.text = state.category.title
+            binding.categoryTitle.text = state.category.title.replaceFirstChar {
+                if (it.isLowerCase()) {
+                    it.titlecase(Locale.getDefault())
+                } else it.toString()
+            }
             currentCategory = state.category
-            adapter.submitList(state.movies)
+            adapter.submitList(state.movies) {
+                savedState?.let { layoutManager.onRestoreInstanceState(it) }
+            }
         }
+
+        fun getScrollState(): Parcelable? = layoutManager.onSaveInstanceState()
     }
 }

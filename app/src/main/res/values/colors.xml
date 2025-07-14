@@ -3,19 +3,23 @@
     <color name="black">#FF000000</color>
     <color name="grey">#FF808080</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="chipBackgroundColor">#8079747E</color>
 
-    <color name="primary">#9B45B4</color>
-    <color name="onPrimary">#FFFFFF</color>
-    <color name="primaryContainer">#F8D9FF</color>
-    <color name="onPrimaryContainer">#36003D</color>
-    <color name="secondary">#6A4EA8</color>
-    <color name="onSecondary">#FFFFFF</color>
-    <color name="secondaryContainer">#88E8DDFF</color>
-    <color name="onSecondaryContainer">#25005C</color>
-    <color name="background">#FFFBFE</color>
-    <color name="onBackground">#1C1B1F</color>
-    <color name="surface">#FFFBFE</color>
-    <color name="onSurface">#1C1B1F</color>
-    <color name="outline">#79747E</color>
+    <color name="chipBackgroundColor">#80FFD600</color>
+    <color name="translucentBlack">#80000000</color>
+
+    <color name="text">#FF000000</color>
+
+    <color name="primary">#FFFFD600</color>
+    <color name="onPrimary">#FF000000</color>
+    <color name="primaryContainer">#33FFD600</color>
+    <color name="onPrimaryContainer">#FF000000</color>
+    <color name="secondary">#FFFFC107</color>
+    <color name="onSecondary">#FF000000</color>
+    <color name="secondaryContainer">#33FFC107</color>
+    <color name="onSecondaryContainer">#FF000000</color>
+    <color name="background">#FFF0F0A0</color>
+    <color name="onBackground">#FFFFD600</color>
+    <color name="surface">#FF000000</color>
+    <color name="onSurface">#FFFFD600</color>
+    <color name="outline">#80FFFFFF</color>
 </resources>

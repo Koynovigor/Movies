@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#eab8ff</color>
-    <color name="onPrimary">#54006d</color>
-    <color name="primaryContainer">#74008f</color>
-    <color name="onPrimaryContainer">#f8d9ff</color>
-    <color name="secondary">#d0c0ff</color>
-    <color name="onSecondary">#341564</color>
-    <color name="secondaryContainer">#503a89</color>
-    <color name="onSecondaryContainer">#88e8ddff</color>
-    <color name="background">#1C1B1F</color>
-    <color name="onBackground">#E6E1E5</color>
-    <color name="surface">#1C1B1F</color>
-    <color name="onSurface">#E6E1E5</color>
-    <color name="outline">#948F99</color>
+
+    <color name="text">#FFFFFFFF</color>
+
+    <color name="primary">#FFFFD600</color>
+    <color name="onPrimary">#FF000000</color>
+    <color name="primaryContainer">#33FFD600</color>
+    <color name="onPrimaryContainer">#FF000000</color>
+    <color name="secondary">#FFFFC107</color>
+    <color name="onSecondary">#FF000000</color>
+    <color name="secondaryContainer">#33FFC107</color>
+    <color name="onSecondaryContainer">#FF000000</color>
+    <color name="background">#FF0F0F0F</color>
+    <color name="onBackground">#FFFFD600</color>
+    <color name="surface">#FFB57900</color>
+    <color name="onSurface">#FFFFD600</color>
+    <color name="outline">#80FFFFFF</color>
+    <color name="translucentBlack">#80000000</color>
 </resources>
