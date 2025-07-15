@@ -1,6 +1,6 @@
 package com.l3on1kl.movies.data.mapper
 
-import com.l3on1kl.movies.data.local.MovieEntity
+import com.l3on1kl.movies.data.local.entity.MovieEntity
 import com.l3on1kl.movies.data.remote.dto.MovieDetailsDto
 import com.l3on1kl.movies.data.remote.dto.MovieDto
 import com.l3on1kl.movies.domain.model.Movie

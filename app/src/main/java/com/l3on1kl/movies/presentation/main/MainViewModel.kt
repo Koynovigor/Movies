@@ -9,8 +9,11 @@ import com.l3on1kl.movies.domain.usecase.GetMoviesUseCase
 import com.l3on1kl.movies.util.ErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -26,6 +29,9 @@ class MainViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<UiState>(UiState.Loading)
     val state: StateFlow<UiState> = _state.asStateFlow()
+
+    private val _snackbar = MutableSharedFlow<String>()
+    val snackbar: SharedFlow<String> = _snackbar.asSharedFlow()
 
     private var loadJob: Job? = null
 
@@ -58,9 +64,13 @@ class MainViewModel @Inject constructor(
                     catStates
                 )
             } catch (e: Exception) {
-                _state.value = UiState.Error(
-                    ErrorMapper.map(e, app)
-                )
+                val message = ErrorMapper.map(e, app)
+
+                if (_state.value is UiState.Success) {
+                    _snackbar.emit(message)
+                } else {
+                    _state.value = UiState.Error(message)
+                }
             }
         }
     }
@@ -74,7 +84,7 @@ class MainViewModel @Inject constructor(
                 category,
                 next
             ).catch { error ->
-                _state.value = UiState.Error(
+                _snackbar.emit(
                     ErrorMapper.map(error, app)
                 )
             }.collect { list ->

@@ -1,9 +1,10 @@
-package com.l3on1kl.movies.data.local
+package com.l3on1kl.movies.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.l3on1kl.movies.data.local.entity.MovieEntity
 
 @Dao
 interface MovieDao {
@@ -12,7 +13,7 @@ interface MovieDao {
         categoryId: Int
     ): List<MovieEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     suspend fun insertAll(
         movies: List<MovieEntity>
     )

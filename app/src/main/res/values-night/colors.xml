@@ -2,6 +2,7 @@
 <resources>
 
     <color name="text">#FFFFFFFF</color>
+    <color name="textSecondary">#FF000000</color>
 
     <color name="primary">#FFFFD600</color>
     <color name="onPrimary">#FF000000</color>

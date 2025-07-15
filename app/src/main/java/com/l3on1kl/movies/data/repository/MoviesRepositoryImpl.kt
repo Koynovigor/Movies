@@ -1,7 +1,9 @@
 package com.l3on1kl.movies.data.repository
 
 import com.l3on1kl.movies.BuildConfig
-import com.l3on1kl.movies.data.local.MovieDao
+import com.l3on1kl.movies.data.local.dao.CategoryDao
+import com.l3on1kl.movies.data.local.dao.MovieDao
+import com.l3on1kl.movies.data.local.entity.CategoryEntity
 import com.l3on1kl.movies.data.mapper.MovieMapper
 import com.l3on1kl.movies.data.remote.TmdbApiService
 import com.l3on1kl.movies.data.remote.dto.ImagesCfg
@@ -20,7 +22,8 @@ import javax.inject.Singleton
 @Singleton
 class MoviesRepositoryImpl @Inject constructor(
     private val api: TmdbApiService,
-    private val dao: MovieDao
+    private val dao: MovieDao,
+    private val categoryDao: CategoryDao
 ) : MoviesRepository {
     private var imagesConfig: ImagesCfg? = null
     private var configTimestamp: Long = 0L
@@ -39,21 +42,40 @@ class MoviesRepositoryImpl @Inject constructor(
     }
 
     override fun getCategories(): Flow<List<MovieCategory>> = flow {
-        val result = api.getGenres(BuildConfig.TMDB_API_KEY)
-        emit(
-            result.genres.map {
-                MovieCategory(
-                    it.id,
-                    it.name.replaceFirstChar { char ->
-                        if (char.isLowerCase()) {
-                            char.titlecase(Locale.getDefault())
-                        } else {
-                            char.toString()
+        runCatching {
+            api.getGenres(BuildConfig.TMDB_API_KEY)
+        }
+            .onSuccess { result ->
+                val categories = result.genres.map {
+                    MovieCategory(
+                        it.id,
+                        it.name.replaceFirstChar { char ->
+                            if (char.isLowerCase()) {
+                                char.titlecase(Locale.getDefault())
+                            } else {
+                                char.toString()
+                            }
                         }
+                    )
+                }
+                categoryDao.clearAll()
+                categoryDao.insertAll(
+                    categories.map {
+                        CategoryEntity(it.id, it.title)
                     }
                 )
+                emit(categories)
             }
-        )
+            .onFailure { error ->
+                val cached = categoryDao.getAll()
+                if (cached.isNotEmpty()) {
+                    emit(cached.map {
+                        MovieCategory(it.id, it.name)
+                    })
+                } else {
+                    throw error
+                }
+            }
     }
 
     override fun getMovies(

@@ -10,6 +10,7 @@
     <color name="translucentBlack">#80000000</color>
 
     <color name="text">#FF000000</color>
+    <color name="textSecondary">#FFFFD600</color>
 
     <color name="primary">#FFFFD600</color>
     <color name="onPrimary">#FF000000</color>
