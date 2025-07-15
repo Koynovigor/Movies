@@ -38,11 +38,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                app:navigationIcon="@drawable/ic_back"
-                app:titleTextColor="?attr/colorOnPrimaryContainer"
                 app:layout_constraintEnd_toEndOf="@id/poster"
                 app:layout_constraintStart_toStartOf="@id/poster"
-                app:layout_constraintTop_toTopOf="@id/poster" />
+                app:layout_constraintTop_toTopOf="@id/poster"
+                app:navigationIcon="@drawable/ic_back"
+                app:titleTextColor="?attr/colorOnPrimaryContainer" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/rating"
@@ -96,29 +96,6 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:textAppearance="?attr/textAppearanceBodySmall" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/errorGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:visibility="gone">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/errorText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/error_placeholder"
-                android:textAppearance="?attr/textAppearanceBodyLarge" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/retryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/retry" />
         </LinearLayout>
 
         <ProgressBar

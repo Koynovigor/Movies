@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -12,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.material.snackbar.Snackbar
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMovieDetailsBinding
 import com.l3on1kl.movies.util.TmdbConfigHolder
@@ -72,25 +74,31 @@ class MovieDetailsFragment : Fragment() {
     private fun setLoading() = with(binding) {
         progressBar.visibility = View.VISIBLE
         contentGroup.visibility = View.GONE
-        errorGroup.visibility = View.GONE
     }
 
     private fun setError(message: String) = with(binding) {
         progressBar.visibility = View.GONE
         contentGroup.visibility = View.GONE
-        errorGroup.visibility = View.VISIBLE
         scrim.visibility = View.GONE
         rating.visibility = View.GONE
-        errorText.text = message
-        retryButton.setOnClickListener {
+
+        Snackbar.make(
+            root,
+            message,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(R.string.retry) {
             viewModel.load()
-        }
+        }.setActionTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.textSecondary
+            )
+        ).show()
     }
 
     private fun setData(movie: com.l3on1kl.movies.domain.model.MovieDetails) = with(binding) {
         progressBar.visibility = View.GONE
         contentGroup.visibility = View.VISIBLE
-        errorGroup.visibility = View.GONE
         scrim.visibility = View.VISIBLE
         rating.visibility = View.VISIBLE
 
