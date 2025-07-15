@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
-import com.l3on1kl.movies.presentation.details.MovieDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -29,14 +28,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             viewModel.loadNextPage(category)
         },
         onMovieClick = { movie ->
-            parentFragmentManager.commit {
-                replace(
-                    R.id.fragmentContainer,
-                    MovieDetailsFragment.newInstance(movie.id)
-                )
-
-                addToBackStack(null)
-            }
+            val action = MainFragmentDirections.actionMainToDetails(movie.id)
+            findNavController().navigate(action)
         }
     )
 

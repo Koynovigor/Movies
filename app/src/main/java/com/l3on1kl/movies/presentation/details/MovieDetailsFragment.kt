@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.l3on1kl.movies.R
@@ -31,7 +32,7 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         savedInstanceState: Bundle?
     ) {
         binding.toolbar.setNavigationOnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigateUp()
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -125,13 +126,5 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .centerCrop()
             .into(poster)
-    }
-
-    companion object {
-        fun newInstance(id: Long) = MovieDetailsFragment().apply {
-            arguments = Bundle().apply {
-                putLong("movieId", id)
-            }
-        }
     }
 }
