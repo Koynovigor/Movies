@@ -79,6 +79,8 @@ class MovieDetailsFragment : Fragment() {
         progressBar.visibility = View.GONE
         contentGroup.visibility = View.GONE
         errorGroup.visibility = View.VISIBLE
+        scrim.visibility = View.GONE
+        rating.visibility = View.GONE
         errorText.text = message
         retryButton.setOnClickListener {
             viewModel.load()
@@ -89,6 +91,8 @@ class MovieDetailsFragment : Fragment() {
         progressBar.visibility = View.GONE
         contentGroup.visibility = View.VISIBLE
         errorGroup.visibility = View.GONE
+        scrim.visibility = View.VISIBLE
+        rating.visibility = View.VISIBLE
 
         title.text = movie.title
         tagline.text = movie.tagline
