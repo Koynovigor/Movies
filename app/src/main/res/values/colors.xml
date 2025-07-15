@@ -3,6 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="grey">#FF808080</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="error">#FF000000</color>
+    <color name="transparent">#00000000</color>
 
     <color name="chipBackgroundColor">#80FFD600</color>
     <color name="translucentBlack">#80000000</color>

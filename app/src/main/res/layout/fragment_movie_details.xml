@@ -33,6 +33,17 @@
                 app:layout_constraintStart_toStartOf="@id/poster"
                 app:layout_constraintTop_toTopOf="@id/poster" />
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                app:navigationIcon="@drawable/ic_back"
+                app:titleTextColor="?attr/colorOnPrimaryContainer"
+                app:layout_constraintEnd_toEndOf="@id/poster"
+                app:layout_constraintStart_toStartOf="@id/poster"
+                app:layout_constraintTop_toTopOf="@id/poster" />
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/rating"
                 style="@style/Widget.Movies.RatingChip"

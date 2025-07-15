@@ -30,6 +30,9 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         view: View,
         savedInstanceState: Bundle?
     ) {
+        binding.toolbar.setNavigationOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
