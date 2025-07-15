@@ -51,18 +51,28 @@ class MainViewModel @Inject constructor(
                 pages.clear()
                 categories.forEach { pages[it.id] = 1 }
 
-                val catStates = categories.map { cat ->
-                    val movies = getMovies(
-                        cat,
-                        pages[cat.id] ?: 1
-                    ).first()
-
-                    CategoryState(cat, movies)
+                var errorMessage: String? = null
+                val catStates = categories.mapNotNull { cat ->
+                    runCatching {
+                        val movies = getMovies(
+                            cat,
+                            pages[cat.id] ?: 1
+                        ).first()
+                        CategoryState(cat, movies)
+                    }.onFailure { e ->
+                        errorMessage = ErrorMapper.map(
+                            e,
+                            app
+                        )
+                    }.getOrNull()
                 }
 
-                _state.value = UiState.Success(
-                    catStates
-                )
+                if (catStates.isNotEmpty()) {
+                    _state.value = UiState.Success(catStates)
+                    errorMessage?.let { _snackbar.emit(it) }
+                } else {
+                    throw java.io.IOException("No cached data")
+                }
             } catch (e: Exception) {
                 val message = ErrorMapper.map(e, app)
 
