@@ -1,7 +1,9 @@
 package com.l3on1kl.movies.presentation.details
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,21 +21,34 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 @AndroidEntryPoint
-class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
-
-    private val binding by lazy {
-        FragmentMovieDetailsBinding.bind(requireView())
-    }
-
+class MovieDetailsFragment : Fragment() {
+    private var _binding: FragmentMovieDetailsBinding? = null
+    private val binding get() = requireNotNull(_binding)
     private val viewModel by viewModels<MovieDetailsViewModel>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMovieDetailsBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
+    }
 
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
     ) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
@@ -47,6 +62,11 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setLoading() = with(binding) {

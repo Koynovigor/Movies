@@ -2,27 +2,27 @@ package com.l3on1kl.movies.presentation.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
-import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainFragment : Fragment(R.layout.fragment_main) {
+class MainFragment : Fragment() {
+    private var _binding: FragmentMainBinding? = null
+    private val binding get() = requireNotNull(_binding)
+    private val viewModel by activityViewModels<MainViewModel>()
 
-    private val binding by lazy {
-        FragmentMainBinding.bind(requireView())
-    }
-    private val viewModel by viewModels<MainViewModel>()
     private val categoryAdapter = CategoryAdapter(
         loadNext = { category ->
             viewModel.loadNextPage(category)
@@ -33,7 +33,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     )
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMainBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext())
 
@@ -57,6 +72,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setLoading() = with(binding) {
