@@ -1,5 +1,6 @@
 package com.l3on1kl.movies.data.mapper
 
+import com.l3on1kl.movies.data.local.entity.MovieDetailsEntity
 import com.l3on1kl.movies.data.local.entity.MovieEntity
 import com.l3on1kl.movies.data.remote.dto.MovieDetailsDto
 import com.l3on1kl.movies.data.remote.dto.MovieDto
@@ -62,5 +63,41 @@ object MovieMapper {
         budget = dto.budget,
         revenue = dto.revenue,
         originalLanguage = dto.originalLanguage
+    )
+
+    fun fromDetailsEntity(entity: MovieDetailsEntity) = MovieDetails(
+        id = entity.id,
+        title = entity.title,
+        overview = entity.overview,
+        voteAverage = entity.voteAverage,
+        posterPath = entity.posterPath,
+        backdropPath = entity.backdropPath,
+        runtime = entity.runtime,
+        releaseDate = entity.releaseDate,
+        tagline = entity.tagline,
+        genres = if (entity.genres.isNotEmpty()) entity.genres.split(',') else emptyList(),
+        originalTitle = entity.originalTitle,
+        status = entity.status,
+        budget = entity.budget,
+        revenue = entity.revenue,
+        originalLanguage = entity.originalLanguage
+    )
+
+    fun toDetailsEntity(details: MovieDetails) = MovieDetailsEntity(
+        id = details.id,
+        title = details.title,
+        overview = details.overview,
+        voteAverage = details.voteAverage,
+        posterPath = details.posterPath,
+        backdropPath = details.backdropPath,
+        runtime = details.runtime,
+        releaseDate = details.releaseDate,
+        tagline = details.tagline,
+        genres = details.genres.joinToString(separator = ","),
+        originalTitle = details.originalTitle,
+        status = details.status,
+        budget = details.budget,
+        revenue = details.revenue,
+        originalLanguage = details.originalLanguage
     )
 }

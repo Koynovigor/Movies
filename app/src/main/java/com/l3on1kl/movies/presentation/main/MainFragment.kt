@@ -16,14 +16,19 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.material.snackbar.Snackbar
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
+import com.l3on1kl.movies.util.NetworkMonitor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = requireNotNull(_binding)
     private val viewModel by activityViewModels<MainViewModel>()
+
+    @Inject
+    lateinit var networkMonitor: NetworkMonitor
 
     private val categoryAdapter = CategoryAdapter(
         loadNext = { category ->
@@ -79,6 +84,16 @@ class MainFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.snackbar.collect { message ->
                     setError(message)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                networkMonitor.isOnline.collect { online ->
+                    if (online) {
+                        viewModel.refresh()
+                    }
                 }
             }
         }

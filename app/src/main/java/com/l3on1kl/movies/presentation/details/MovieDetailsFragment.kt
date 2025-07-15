@@ -16,17 +16,22 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMovieDetailsBinding
+import com.l3on1kl.movies.util.NetworkMonitor
 import com.l3on1kl.movies.util.TmdbConfigHolder
 import com.l3on1kl.movies.util.toPosterUrl
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MovieDetailsFragment : Fragment() {
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = requireNotNull(_binding)
     private val viewModel by viewModels<MovieDetailsViewModel>()
+
+    @Inject
+    lateinit var networkMonitor: NetworkMonitor
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +65,16 @@ class MovieDetailsFragment : Fragment() {
                         is DetailsUiState.Error -> setError(state.message)
 
                         is DetailsUiState.Success -> setData(state.movie)
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                networkMonitor.isOnline.collect { online ->
+                    if (online) {
+                        viewModel.load()
                     }
                 }
             }

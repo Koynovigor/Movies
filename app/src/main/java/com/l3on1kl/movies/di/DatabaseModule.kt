@@ -38,4 +38,10 @@ object DatabaseModule {
     fun provideCategoryDao(
         db: MoviesDatabase
     ) = db.categoryDao()
+
+    @Provides
+    @Singleton
+    fun provideMovieDetailsDao(
+        db: MoviesDatabase
+    ) = db.movieDetailsDao()
 }
