@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flow
 import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.cancellation.CancellationException
 
 @Singleton
 class MoviesRepositoryImpl @Inject constructor(
@@ -77,6 +78,9 @@ class MoviesRepositoryImpl @Inject constructor(
                     emit(categories)
                 }
                 .onFailure { error ->
+                    if (error is CancellationException)
+                        throw error
+
                     val cached = categoryDao.getAll()
                     if (cached.isNotEmpty()) {
                         emit(
@@ -135,6 +139,9 @@ class MoviesRepositoryImpl @Inject constructor(
                 })
                 emit(result.results.map(MovieMapper::fromDto))
             } catch (e: Exception) {
+                if (e is CancellationException)
+                    throw e
+
                 val cached = dao.getByCategory(category.id)
                 if (cached.isNotEmpty()) {
                     emit(cached.map(MovieMapper::fromEntity))
@@ -167,6 +174,9 @@ class MoviesRepositoryImpl @Inject constructor(
                 detailsDao.insert(MovieMapper.toDetailsEntity(movie))
                 emit(movie)
             } catch (e: Exception) {
+                if (e is CancellationException)
+                    throw e
+
                 val cached = detailsDao.getById(id)
                 if (cached != null) {
                     emit(
