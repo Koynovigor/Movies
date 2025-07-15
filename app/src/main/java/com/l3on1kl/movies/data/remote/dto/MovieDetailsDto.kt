@@ -12,5 +12,10 @@ data class MovieDetailsDto(
     val runtime: Int?,
     @SerializedName("release_date") val releaseDate: String?,
     val tagline: String?,
-    val genres: List<GenreDto>
+    val genres: List<GenreDto>,
+    @SerializedName("original_title") val originalTitle: String?,
+    val status: String?,
+    val budget: Long?,
+    val revenue: Long?,
+    @SerializedName("original_language") val originalLanguage: String?
 )

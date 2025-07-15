@@ -26,13 +26,18 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     private val viewModel by viewModels<MovieDetailsViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
                     when (state) {
                         DetailsUiState.Loading -> setLoading()
+
                         is DetailsUiState.Error -> setError(state.message)
+
                         is DetailsUiState.Success -> setData(state.movie)
                     }
                 }
@@ -51,7 +56,9 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         contentGroup.visibility = View.GONE
         errorGroup.visibility = View.VISIBLE
         errorText.text = message
-        retryButton.setOnClickListener { viewModel.load() }
+        retryButton.setOnClickListener {
+            viewModel.load()
+        }
     }
 
     private fun setData(movie: com.l3on1kl.movies.domain.model.MovieDetails) = with(binding) {
@@ -64,15 +71,49 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
         overview.text = movie.overview
         info.text = listOfNotNull(
             movie.releaseDate,
-            movie.runtime?.let { getString(R.string.minutes_format, it) },
+            movie.runtime?.let {
+                getString(
+                    R.string.minutes_format,
+                    it
+                )
+            },
             movie.genres.joinToString()
         ).joinToString(separator = " \u2022 ")
 
+        additionalInfo.text = listOfNotNull(
+            movie.originalTitle?.let {
+                getString(
+                    R.string.original_title_format,
+                    it
+                )
+            },
+            movie.status?.let {
+                getString(
+                    R.string.status_format,
+                    it
+                )
+            },
+            movie.budget?.let {
+                getString(
+                    R.string.budget_format,
+                    it
+                )
+            },
+            movie.revenue?.let {
+                getString(
+                    R.string.revenue_format,
+                    it
+                )
+            },
+            movie.originalLanguage
+        ).joinToString(separator = "\n")
+
         rating.text = String.format(Locale.US, "%.1f", movie.voteAverage)
 
-        val url = movie.backdropPath.toPosterUrl(TmdbConfigHolder.imagesConfig)
-            ?: movie.posterPath.toPosterUrl(TmdbConfigHolder.imagesConfig)
-            ?: R.drawable.ic_poster_placeholder
+        val url =
+            movie.backdropPath.toPosterUrl(TmdbConfigHolder.imagesConfig)
+                ?: movie.posterPath.toPosterUrl(TmdbConfigHolder.imagesConfig)
+                ?: R.drawable.ic_poster_placeholder
 
         Glide.with(poster)
             .load(url)
@@ -85,7 +126,9 @@ class MovieDetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     companion object {
         fun newInstance(id: Long) = MovieDetailsFragment().apply {
-            arguments = Bundle().apply { putLong("movieId", id) }
+            arguments = Bundle().apply {
+                putLong("movieId", id)
+            }
         }
     }
 }

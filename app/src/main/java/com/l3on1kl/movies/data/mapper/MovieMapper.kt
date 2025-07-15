@@ -56,6 +56,11 @@ object MovieMapper {
         runtime = dto.runtime,
         releaseDate = dto.releaseDate,
         tagline = dto.tagline,
-        genres = dto.genres.map { it.name }
+        genres = dto.genres.map { it.name },
+        originalTitle = dto.originalTitle,
+        status = dto.status,
+        budget = dto.budget,
+        revenue = dto.revenue,
+        originalLanguage = dto.originalLanguage
     )
 }

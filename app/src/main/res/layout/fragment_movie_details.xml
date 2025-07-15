@@ -11,8 +11,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="16:9">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/poster"
@@ -22,8 +21,7 @@
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="16:9"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/MoviesCardShape" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/scrim"
@@ -80,6 +78,13 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
+
+            <TextView
+                android:id="@+id/additionalInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:textAppearance="?attr/textAppearanceBodySmall" />
         </LinearLayout>
 
         <LinearLayout
