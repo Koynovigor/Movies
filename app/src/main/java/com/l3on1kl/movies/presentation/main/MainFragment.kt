@@ -18,6 +18,7 @@ import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
 import com.l3on1kl.movies.util.NetworkMonitor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -91,9 +92,13 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 networkMonitor.isOnline.collect { online ->
-                    if (online) {
-                        viewModel.refresh()
-                    }
+                    networkMonitor.isOnline
+                        .drop(1)
+                        .collect { online ->
+                            if (online) {
+                                viewModel.refresh()
+                            }
+                        }
                 }
             }
         }

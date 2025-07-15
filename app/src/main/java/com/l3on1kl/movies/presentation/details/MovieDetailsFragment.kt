@@ -20,6 +20,7 @@ import com.l3on1kl.movies.util.NetworkMonitor
 import com.l3on1kl.movies.util.TmdbConfigHolder
 import com.l3on1kl.movies.util.toPosterUrl
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
@@ -73,9 +74,13 @@ class MovieDetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 networkMonitor.isOnline.collect { online ->
-                    if (online) {
-                        viewModel.load()
-                    }
+                    networkMonitor.isOnline
+                        .drop(1)
+                        .collect { online ->
+                            if (online) {
+                                viewModel.load()
+                            }
+                        }
                 }
             }
         }
