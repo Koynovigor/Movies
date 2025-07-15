@@ -7,6 +7,7 @@ import com.l3on1kl.movies.data.remote.TmdbApiService
 import com.l3on1kl.movies.data.remote.dto.ImagesCfg
 import com.l3on1kl.movies.domain.model.Movie
 import com.l3on1kl.movies.domain.model.MovieCategory
+import com.l3on1kl.movies.domain.model.MovieDetails
 import com.l3on1kl.movies.domain.repository.MoviesRepository
 import com.l3on1kl.movies.util.TmdbConfigHolder
 import kotlinx.coroutines.flow.Flow
@@ -99,5 +100,18 @@ class MoviesRepositoryImpl @Inject constructor(
         } else {
             throw it
         }
+    }
+
+    override fun getMovieDetails(
+        id: Long
+    ): Flow<MovieDetails> = flow {
+        refreshConfigIfNeeded()
+
+        val result = api.getMovieDetails(
+            id,
+            BuildConfig.TMDB_API_KEY
+        )
+
+        emit(MovieMapper.fromDetailsDto(result))
     }
 }

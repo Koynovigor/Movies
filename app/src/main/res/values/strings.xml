@@ -11,4 +11,6 @@
     <string name="error_no_internet">Нет подключения к интернету</string>
     <string name="error_timeout">Превышено время ожидания ответа от сервера</string>
     <string name="error_network">Ошибка сети</string>
+
+    <string name="minutes_format">%1$d мин.</string>
 </resources>

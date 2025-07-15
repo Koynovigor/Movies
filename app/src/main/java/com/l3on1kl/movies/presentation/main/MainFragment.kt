@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.ads.AdRequest
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMainBinding
+import com.l3on1kl.movies.presentation.details.MovieDetailsFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -22,9 +24,21 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         FragmentMainBinding.bind(requireView())
     }
     private val viewModel by viewModels<MainViewModel>()
-    private val categoryAdapter = CategoryAdapter { category ->
-        viewModel.loadNextPage(category)
-    }
+    private val categoryAdapter = CategoryAdapter(
+        loadNext = { category ->
+            viewModel.loadNextPage(category)
+        },
+        onMovieClick = { movie ->
+            parentFragmentManager.commit {
+                replace(
+                    R.id.fragmentContainer,
+                    MovieDetailsFragment.newInstance(movie.id)
+                )
+
+                addToBackStack(null)
+            }
+        }
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.recyclerView.layoutManager =

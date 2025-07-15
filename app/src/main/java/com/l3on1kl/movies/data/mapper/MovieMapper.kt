@@ -1,8 +1,10 @@
 package com.l3on1kl.movies.data.mapper
 
 import com.l3on1kl.movies.data.local.MovieEntity
+import com.l3on1kl.movies.data.remote.dto.MovieDetailsDto
 import com.l3on1kl.movies.data.remote.dto.MovieDto
 import com.l3on1kl.movies.domain.model.Movie
+import com.l3on1kl.movies.domain.model.MovieDetails
 
 object MovieMapper {
     fun fromDto(
@@ -40,5 +42,20 @@ object MovieMapper {
         voteAverage = movie.voteAverage,
         categoryId = categoryId,
         page = page
+    )
+
+    fun fromDetailsDto(
+        dto: MovieDetailsDto
+    ) = MovieDetails(
+        id = dto.id,
+        title = dto.title,
+        overview = dto.overview,
+        voteAverage = dto.voteAverage,
+        posterPath = dto.posterPath,
+        backdropPath = dto.backdropPath,
+        runtime = dto.runtime,
+        releaseDate = dto.releaseDate,
+        tagline = dto.tagline,
+        genres = dto.genres.map { it.name }
     )
 }
