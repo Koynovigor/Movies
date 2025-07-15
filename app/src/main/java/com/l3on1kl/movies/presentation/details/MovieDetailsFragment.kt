@@ -16,6 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.FragmentMovieDetailsBinding
+import com.l3on1kl.movies.domain.model.MovieDetails
 import com.l3on1kl.movies.util.NetworkMonitor
 import com.l3on1kl.movies.util.TmdbConfigHolder
 import com.l3on1kl.movies.util.toPosterUrl
@@ -94,9 +95,13 @@ class MovieDetailsFragment : Fragment() {
     private fun setLoading() = with(binding) {
         progressBar.visibility = View.VISIBLE
         contentGroup.visibility = View.GONE
+        poster.visibility = View.GONE
+        scrim.visibility = View.GONE
     }
 
-    private fun setError(message: String) = with(binding) {
+    private fun setError(
+        message: String
+    ) = with(binding) {
         progressBar.visibility = View.GONE
         contentGroup.visibility = View.GONE
         scrim.visibility = View.GONE
@@ -116,9 +121,12 @@ class MovieDetailsFragment : Fragment() {
         ).show()
     }
 
-    private fun setData(movie: com.l3on1kl.movies.domain.model.MovieDetails) = with(binding) {
+    private fun setData(
+        movie: MovieDetails
+    ) = with(binding) {
         progressBar.visibility = View.GONE
         contentGroup.visibility = View.VISIBLE
+        poster.visibility = View.VISIBLE
         scrim.visibility = View.VISIBLE
         rating.visibility = View.VISIBLE
 

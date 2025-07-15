@@ -66,8 +66,7 @@ class MoviesRepositoryImpl @Inject constructor(
                         )
                     }
 
-                    categoryDao.clearAll()
-                    categoryDao.insertAll(
+                    categoryDao.replaceAll(
                         categories.map {
                             CategoryEntity(
                                 it.id,
