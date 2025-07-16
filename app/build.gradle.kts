@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.navigation.safe.args)
 }
 
 android {
@@ -16,8 +17,8 @@ android {
         applicationId = "com.l3on1kl.movies"
         minSdk = 28
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -34,6 +35,15 @@ android {
         buildConfigField("String", "TMDB_API_KEY", "\"$tmdbKey\"")
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file("keystore.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyPassword = System.getenv("KEY_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -41,6 +51,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -86,8 +97,18 @@ dependencies {
 
     // UI
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.viewpager2)
     implementation(libs.glide)
     ksp(libs.compiler)
+    implementation(libs.gms.ads)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.palette)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     // Lifecycle
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="grey">#FF808080</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="error">#FF000000</color>
-    <color name="transparent">#00000000</color>
 
-    <color name="chipBackgroundColor">#80FFD600</color>
-    <color name="translucentBlack">#80000000</color>
-
-    <color name="text">#FF000000</color>
-    <color name="textSecondary">#FFFFD600</color>
+    <color name="text">#FFFFFFFF</color>
+    <color name="textSecondary">#FF000000</color>
 
     <color name="primary">#FFFFD600</color>
     <color name="onPrimary">#FF000000</color>
@@ -20,13 +12,14 @@
     <color name="onSecondary">#FF000000</color>
     <color name="secondaryContainer">#33FFC107</color>
     <color name="onSecondaryContainer">#FF000000</color>
-    <color name="background">#FFF0F0A0</color>
+    <color name="background">#FF0F0F0F</color>
     <color name="onBackground">#FFFFD600</color>
-    <color name="surface">#FF000000</color>
+    <color name="surface">#FFB57900</color>
     <color name="onSurface">#FFFFD600</color>
     <color name="outline">#80FFFFFF</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorSurfaceVariant">#F0F0F0</color>
+    <color name="translucentBlack">#80000000</color>
+    <color name="colorSurface">#1E1E1E</color>
+    <color name="colorSurfaceVariant">#2A2A2A</color>
     <color name="colorOutline">#79747E</color>
     <color name="colorPrimaryContainer">?attr/colorPrimaryContainer</color>
 </resources>

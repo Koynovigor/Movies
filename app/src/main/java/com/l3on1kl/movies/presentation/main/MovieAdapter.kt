@@ -6,11 +6,25 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.l3on1kl.movies.R
 import com.l3on1kl.movies.databinding.ItemMovieBinding
 import com.l3on1kl.movies.domain.model.Movie
+import com.l3on1kl.movies.util.TmdbConfigHolder
+import com.l3on1kl.movies.util.toPosterUrl
+import java.util.Locale
 
-class MovieAdapter :
-    ListAdapter<Movie, MovieAdapter.MovieViewHolder>(Diff) {
+class MovieAdapter(
+    private val onClick: (Movie) -> Unit
+) : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(Diff) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(
+        position: Int
+    ) = getItem(position).id
 
     object Diff : DiffUtil.ItemCallback<Movie>() {
         override fun areItemsTheSame(
@@ -32,7 +46,8 @@ class MovieAdapter :
             LayoutInflater.from(parent.context),
             parent,
             false
-        )
+        ),
+        onClick
     )
 
     override fun onBindViewHolder(
@@ -43,14 +58,37 @@ class MovieAdapter :
     )
 
     class MovieViewHolder(
-        private val itemViewBinding: ItemMovieBinding
+        private val itemViewBinding: ItemMovieBinding,
+        private val onClick: (Movie) -> Unit
     ) : RecyclerView.ViewHolder(itemViewBinding.root) {
-        fun bind(
-            movieData: Movie
-        ) {
-            itemViewBinding.title.text = movieData.title
+
+        fun bind(movie: Movie) {
+            itemViewBinding.title.text = movie.title
+
+            itemViewBinding.rating.text = String.format(
+                Locale.US,
+                "%.1f",
+                movie.voteAverage
+            )
+
+            val url = movie.posterPath.toPosterUrl(
+                TmdbConfigHolder.imagesConfig
+            )
+                ?: movie.backdropPath.toPosterUrl(
+                    TmdbConfigHolder.imagesConfig
+                )
+                ?: R.drawable.ic_poster_placeholder
+
+            itemViewBinding.card.setOnClickListener {
+                onClick(movie)
+            }
+
             Glide.with(itemViewBinding.poster)
-                .load("https://image.tmdb.org/t/p/w342${movieData.posterPath}")
+                .load(url)
+                .placeholder(R.drawable.ic_poster_placeholder)
+                .error(R.drawable.ic_poster_placeholder)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
                 .into(itemViewBinding.poster)
         }
     }
