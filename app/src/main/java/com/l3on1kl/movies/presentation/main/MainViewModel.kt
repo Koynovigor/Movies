@@ -3,14 +3,19 @@ package com.l3on1kl.movies.presentation.main
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.l3on1kl.movies.R
 import com.l3on1kl.movies.domain.model.MovieCategory
 import com.l3on1kl.movies.domain.usecase.GetCategoriesUseCase
 import com.l3on1kl.movies.domain.usecase.GetMoviesUseCase
 import com.l3on1kl.movies.util.ErrorMapper
+import com.l3on1kl.movies.util.NetworkMonitor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -21,11 +26,15 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val app: Application,
     private val getMovies: GetMoviesUseCase,
-    private val getCategories: GetCategoriesUseCase
+    private val getCategories: GetCategoriesUseCase,
+    private val networkMonitor: NetworkMonitor
 ) : AndroidViewModel(app) {
 
     private val _state = MutableStateFlow<UiState>(UiState.Loading)
     val state: StateFlow<UiState> = _state.asStateFlow()
+
+    private val _snackbar = MutableSharedFlow<String>()
+    val snackbar: SharedFlow<String> = _snackbar.asSharedFlow()
 
     private var loadJob: Job? = null
 
@@ -41,26 +50,44 @@ class MainViewModel @Inject constructor(
         loadJob = viewModelScope.launch {
             _state.value = UiState.Loading
             try {
+                var errorMessage: String? = null
+                if (!networkMonitor.checkConnected()) {
+                    errorMessage = app.getString(R.string.error_no_internet)
+                }
+
                 categories = getCategories().first()
                 pages.clear()
                 categories.forEach { pages[it.id] = 1 }
 
-                val catStates = categories.map { cat ->
-                    val movies = getMovies(
-                        cat,
-                        pages[cat.id] ?: 1
-                    ).first()
-
-                    CategoryState(cat, movies)
+                val catStates = categories.mapNotNull { cat ->
+                    runCatching {
+                        val movies = getMovies(
+                            cat,
+                            pages[cat.id] ?: 1
+                        ).first()
+                        CategoryState(cat, movies)
+                    }.onFailure { e ->
+                        errorMessage = ErrorMapper.map(
+                            e,
+                            app
+                        )
+                    }.getOrNull()
                 }
 
-                _state.value = UiState.Success(
-                    catStates
-                )
+                if (catStates.isNotEmpty()) {
+                    _state.value = UiState.Success(catStates)
+                    errorMessage?.let { _snackbar.emit(it) }
+                } else {
+                    throw java.io.IOException("No cached data")
+                }
             } catch (e: Exception) {
-                _state.value = UiState.Error(
-                    ErrorMapper.map(e, app)
-                )
+                val message = ErrorMapper.map(e, app)
+
+                if (_state.value is UiState.Success) {
+                    _snackbar.emit(message)
+                } else {
+                    _state.value = UiState.Error(message)
+                }
             }
         }
     }
@@ -74,7 +101,7 @@ class MainViewModel @Inject constructor(
                 category,
                 next
             ).catch { error ->
-                _state.value = UiState.Error(
+                _snackbar.emit(
                     ErrorMapper.map(error, app)
                 )
             }.collect { list ->

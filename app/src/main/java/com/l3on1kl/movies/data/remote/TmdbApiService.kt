@@ -2,6 +2,7 @@ package com.l3on1kl.movies.data.remote
 
 import com.l3on1kl.movies.data.remote.dto.ConfigurationDto
 import com.l3on1kl.movies.data.remote.dto.GenresDto
+import com.l3on1kl.movies.data.remote.dto.MovieDetailsDto
 import com.l3on1kl.movies.data.remote.dto.MoviesPageDto
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -25,4 +26,11 @@ interface TmdbApiService {
         @Query("with_genres") genreId: Int,
         @Query("language") language: String = "ru-RU"
     ): MoviesPageDto
+
+    @GET("3/movie/{movie_id}")
+    suspend fun getMovieDetails(
+        @retrofit2.http.Path("movie_id") movieId: Long,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String = "ru-RU"
+    ): MovieDetailsDto
 }

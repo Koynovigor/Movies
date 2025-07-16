@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.l3on1kl.movies.databinding.ItemCategoryBinding
+import com.l3on1kl.movies.domain.model.Movie
 import com.l3on1kl.movies.domain.model.MovieCategory
 import java.util.Locale
 
 class CategoryAdapter(
-    private val loadNext: (category: MovieCategory) -> Unit
+    private val loadNext: (category: MovieCategory) -> Unit,
+    private val onMovieClick: (movie: Movie) -> Unit
 ) : ListAdapter<CategoryState, CategoryAdapter.CategoryViewHolder>(Diff) {
 
     private val scrollStates = mutableMapOf<Int, Parcelable?>()
@@ -71,7 +73,7 @@ class CategoryAdapter(
     ) : RecyclerView.ViewHolder(
         binding.root
     ) {
-        private val adapter = MovieAdapter()
+        private val adapter = MovieAdapter(onMovieClick)
         private val layoutManager = LinearLayoutManager(
             binding.root.context,
             RecyclerView.HORIZONTAL,

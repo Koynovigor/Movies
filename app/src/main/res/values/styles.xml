@@ -6,18 +6,36 @@
         <item name="cornerSize">16dp</item>
     </style>
 
+    <style name="Widget.Movies.Toolbar.Clear" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="navigationIconTint">?attr/colorOnSecondaryContainer</item>
+    </style>
+
     <style name="Widget.Movies.RatingChip" parent="Widget.Material3.Chip.Assist">
         <item name="chipBackgroundColor">@color/chipBackgroundColor</item>
         <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">32dp</item>
         <item name="android:textAppearance">@style/TextAppearance.Movies.Rating</item>
-        <item name="chipIconSize">14sp</item>
-        <item name="chipIconTint">?attr/colorOnPrimaryContainer</item>
+        <item name="chipIconSize">16dp</item>
+        <item name="chipIconTint">?attr/colorOnSecondaryContainer</item>
+        <item name="android:paddingStart">6dp</item>
     </style>
 
     <style name="TextAppearance.Movies.Rating" parent="TextAppearance.Material3.LabelSmall">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
     </style>
+
+    <style name="TextAppearance.Movies.RatingMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+    </style>
+
+    <style name="TextAppearance.LabelTitle" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.LabelItem" parent="TextAppearance.Material3.BodyMedium" />
 
     <style name="TextAppearance.Movies.Title" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/white</item>

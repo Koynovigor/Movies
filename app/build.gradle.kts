@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.navigation.safe.args)
 }
 
 android {
@@ -90,6 +91,9 @@ dependencies {
     implementation(libs.glide)
     ksp(libs.compiler)
     implementation(libs.gms.ads)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.palette)
 
     // Room
     implementation(libs.androidx.room.runtime)

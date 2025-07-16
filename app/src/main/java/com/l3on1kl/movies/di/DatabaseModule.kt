@@ -32,4 +32,16 @@ object DatabaseModule {
     fun provideDao(
         db: MoviesDatabase
     ) = db.movieDao()
+
+    @Provides
+    @Singleton
+    fun provideCategoryDao(
+        db: MoviesDatabase
+    ) = db.categoryDao()
+
+    @Provides
+    @Singleton
+    fun provideMovieDetailsDao(
+        db: MoviesDatabase
+    ) = db.movieDetailsDao()
 }

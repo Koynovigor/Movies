@@ -2,6 +2,7 @@
 <resources>
 
     <color name="text">#FFFFFFFF</color>
+    <color name="textSecondary">#FF000000</color>
 
     <color name="primary">#FFFFD600</color>
     <color name="onPrimary">#FF000000</color>
@@ -17,4 +18,8 @@
     <color name="onSurface">#FFFFD600</color>
     <color name="outline">#80FFFFFF</color>
     <color name="translucentBlack">#80000000</color>
+    <color name="colorSurface">#1E1E1E</color>
+    <color name="colorSurfaceVariant">#2A2A2A</color>
+    <color name="colorOutline">#79747E</color>
+    <color name="colorPrimaryContainer">?attr/colorPrimaryContainer</color>
 </resources>

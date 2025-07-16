@@ -14,8 +14,9 @@ import com.l3on1kl.movies.util.TmdbConfigHolder
 import com.l3on1kl.movies.util.toPosterUrl
 import java.util.Locale
 
-class MovieAdapter :
-    ListAdapter<Movie, MovieAdapter.MovieViewHolder>(Diff) {
+class MovieAdapter(
+    private val onClick: (Movie) -> Unit
+) : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(Diff) {
 
     init {
         setHasStableIds(true)
@@ -45,7 +46,8 @@ class MovieAdapter :
             LayoutInflater.from(parent.context),
             parent,
             false
-        )
+        ),
+        onClick
     )
 
     override fun onBindViewHolder(
@@ -56,7 +58,8 @@ class MovieAdapter :
     )
 
     class MovieViewHolder(
-        private val itemViewBinding: ItemMovieBinding
+        private val itemViewBinding: ItemMovieBinding,
+        private val onClick: (Movie) -> Unit
     ) : RecyclerView.ViewHolder(itemViewBinding.root) {
 
         fun bind(movie: Movie) {
@@ -75,6 +78,10 @@ class MovieAdapter :
                     TmdbConfigHolder.imagesConfig
                 )
                 ?: R.drawable.ic_poster_placeholder
+
+            itemViewBinding.card.setOnClickListener {
+                onClick(movie)
+            }
 
             Glide.with(itemViewBinding.poster)
                 .load(url)

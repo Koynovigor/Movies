@@ -1,11 +1,13 @@
-package com.l3on1kl.movies.data.local
+package com.l3on1kl.movies.data.local.entity
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "movies")
+@Entity(
+    tableName = "movies",
+    primaryKeys = ["id", "categoryId"]
+)
 data class MovieEntity(
-    @PrimaryKey val id: Long,
+    val id: Long,
     val title: String,
     val posterPath: String?,
     val backdropPath: String?,
