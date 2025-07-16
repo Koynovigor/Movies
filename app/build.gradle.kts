@@ -1,5 +1,23 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
 import java.util.Properties
+
+val envKey: String? = System.getenv("TMDB_KEY")
+val propKey: String? = (project.findProperty("TMDB_KEY") as? String)
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) {
+        load(FileInputStream(f))
+    }
+}
+val localKey: String? = localProps.getProperty("tmdbKey")
+val tmdbKey: String = envKey
+    ?: propKey
+    ?: localKey
+    ?: throw GradleException(
+        "TMDB_KEY not provided: set ENV, gradle.properties or local.properties"
+    )
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -22,17 +40,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val localProps = Properties().apply {
-            rootProject.file("local.properties").inputStream().use(::load)
-        }
-        val tmdbKey: String = localProps.getProperty("TMDB_API_KEY")
-            ?: System.getenv("TMDB_API_KEY")
-            ?: ""
-        require(tmdbKey.isNotBlank()) {
-            "TMDB_API_KEY is missing in local.properties or env-vars"
-        }
-
-        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbKey\"")
+        buildConfigField("String", "TMDB_KEY", "\"$tmdbKey\"")
     }
 
     signingConfigs {
