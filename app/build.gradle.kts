@@ -40,7 +40,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "TMDB_KEY", "\"$tmdbKey\"")
+        buildConfigField("String", "TMDB_API_KEY", "\"$tmdbKey\"")
     }
 
     signingConfigs {
