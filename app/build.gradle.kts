@@ -2,20 +2,20 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
-val envKey: String? = System.getenv("TMDB_KEY")
-val propKey: String? = (project.findProperty("TMDB_KEY") as? String)
+val envKey: String? = System.getenv("TMDB_API_KEY")
+val propKey: String? = (project.findProperty("TMDB_API_KEY") as? String)
 val localProps = Properties().apply {
     val f = rootProject.file("local.properties")
     if (f.exists()) {
         load(FileInputStream(f))
     }
 }
-val localKey: String? = localProps.getProperty("tmdbKey")
+val localKey: String? = localProps.getProperty("TMDB_API_KEY")
 val tmdbKey: String = envKey
     ?: propKey
     ?: localKey
     ?: throw GradleException(
-        "TMDB_KEY not provided: set ENV, gradle.properties or local.properties"
+        "TMDB_API_KEY not provided: set ENV, gradle.properties or local.properties"
     )
 
 
