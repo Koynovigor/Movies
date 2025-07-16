@@ -14,7 +14,7 @@ jobs:
     name: Build and Release
     runs-on: ubuntu-latest
     env:
-      TMDB_KEY: ${{ secrets.TMDB_KEY }}
+      TMDB_KEY: ${{ secrets.TMDB_API_KEY }}
 
     steps:
       - name: Checkout repository
