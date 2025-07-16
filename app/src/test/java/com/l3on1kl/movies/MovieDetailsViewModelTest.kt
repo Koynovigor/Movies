@@ -10,6 +10,7 @@ import com.l3on1kl.movies.presentation.details.MovieDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
@@ -19,6 +20,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -83,6 +85,78 @@ class MovieDetailsViewModelTest {
     fun `load emits success state`() = runTest {
         advanceUntilIdle()
         val state = viewModel.state.first()
-        assertEquals(true, state is DetailsUiState.Success)
+        assertTrue(state is DetailsUiState.Success)
+
+        state as DetailsUiState.Success
+        assertEquals(1L, state.movie.id)
+        assertEquals("title", state.movie.title)
+    }
+
+    @Test
+    fun `use case returns empty movie results in error`() = runTest {
+        val emptyMovie = MovieDetails(
+            id = 0L,
+            title = "",
+            overview = "",
+            voteAverage = 0.0,
+            posterPath = null,
+            backdropPath = null,
+            runtime = null,
+            releaseDate = null,
+            tagline = null,
+            genres = emptyList(),
+            originalTitle = null,
+            status = null,
+            budget = null,
+            revenue = null,
+            originalLanguage = null
+        )
+        `when`(useCase.invoke(1L)).thenReturn(flowOf(emptyMovie))
+
+        val handle = SavedStateHandle(mapOf("movieId" to 1L))
+        viewModel = MovieDetailsViewModel(
+            application,
+            handle,
+            useCase
+        )
+
+        advanceUntilIdle()
+
+        val state = viewModel.state.first()
+        assertTrue(state is DetailsUiState.Error)
+    }
+
+    @Test
+    fun `missing movieId puts viewmodel in error`() = runTest {
+        val handle = SavedStateHandle()
+        viewModel = MovieDetailsViewModel(
+            application,
+            handle,
+            useCase
+        )
+
+        advanceUntilIdle()
+
+        val state = viewModel.state.first()
+        assertTrue(state is DetailsUiState.Error)
+    }
+
+    @Test
+    fun `use case error moves state to error`() = runTest {
+        `when`(useCase.invoke(1L)).thenReturn(flow {
+            throw RuntimeException("boom")
+        })
+
+        val handle = SavedStateHandle(mapOf("movieId" to 1L))
+        viewModel = MovieDetailsViewModel(
+            application,
+            handle,
+            useCase
+        )
+
+        advanceUntilIdle()
+
+        val state = viewModel.state.first()
+        assertTrue(state is DetailsUiState.Error)
     }
 }

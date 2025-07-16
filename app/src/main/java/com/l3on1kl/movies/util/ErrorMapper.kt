@@ -8,11 +8,11 @@ import java.net.UnknownHostException
 
 object ErrorMapper {
     fun map(throwable: Throwable, context: Context): String = when (throwable) {
-        is UnknownHostException -> context.getString(R.string.error_no_internet)
+        is UnknownHostException -> context.getString(R.string.error_network)
 
         is SocketTimeoutException -> context.getString(R.string.error_timeout)
 
-        is IOException -> context.getString(R.string.error_network)
+        is IOException -> context.getString(R.string.error_no_internet)
 
         else -> throwable.localizedMessage ?: context.getString(R.string.unexpected_error)
     }
