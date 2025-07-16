@@ -1,73 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="320dp"
+            app:contentScrim="?attr/colorSurface"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/poster"
+                android:id="@+id/backdrop"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/movie_poster"
                 android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="16:9"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_collapseMode="parallax" />
 
             <View
                 android:id="@+id/scrim"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="@drawable/poster_scrim"
-                app:layout_constraintBottom_toBottomOf="@id/poster"
-                app:layout_constraintEnd_toEndOf="@id/poster"
-                app:layout_constraintStart_toStartOf="@id/poster"
-                app:layout_constraintTop_toTopOf="@id/poster" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/poster_scrim" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/ratingChip"
+                style="@style/Widget.Movies.RatingChip"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_margin="8dp"
+                android:text=""
+                android:textAppearance="@style/TextAppearance.Movies.RatingMedium"
+                app:chipIcon="@drawable/ic_star"
+                app:chipIconSize="20dp"
+                app:chipIconTint="?attr/colorOnSecondaryContainer"
+                app:layout_collapseMode="pin" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/backChip"
                 style="@style/Widget.Movies.RatingChip"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_margin="8dp"
                 android:text=""
-                app:chipEndPadding="1dp"
+                app:chipEndPadding="0dp"
                 app:chipIcon="@drawable/ic_back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:chipIconTint="?attr/colorOnSecondaryContainer"
+                app:iconEndPadding="0dp"
+                app:layout_collapseMode="pin"
                 app:textEndPadding="0dp" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/rating"
-                style="@style/Widget.Movies.RatingChip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                style="@style/Widget.Movies.Toolbar.Clear"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:visibility="invisible"
+                app:layout_collapseMode="parallax" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:id="@+id/contentGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="32dp">
 
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textAppearance="?attr/textAppearanceHeadlineMedium"
                 android:textStyle="bold" />
 
             <TextView
@@ -76,35 +99,75 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:textAppearance="?attr/textAppearanceBodyMedium"
-                android:textColor="@color/grey" />
+                android:textColor="?attr/colorOnSurfaceVariant" />
 
-            <TextView
-                android:id="@+id/info"
-                android:layout_width="match_parent"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/infoGroup"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:textAppearance="?attr/textAppearanceBodySmall" />
+                app:chipSpacingVertical="0dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/genresGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacingVertical="0dp" />
 
             <TextView
                 android:id="@+id/overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"
-                android:textAppearance="?attr/textAppearanceBodyMedium" />
+                android:textAppearance="?attr/textAppearanceBodyLarge" />
 
-            <TextView
-                android:id="@+id/additionalInfo"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="?attr/colorOutline" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:textAppearance="?attr/textAppearanceBodySmall" />
-        </LinearLayout>
+                android:orientation="vertical"
+                android:paddingTop="16dp">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone" />
-    </LinearLayout>
-</ScrollView>
+                <TextView
+                    android:id="@+id/originalTitle"
+                    style="@style/TextAppearance.LabelTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/status"
+                    style="@style/TextAppearance.LabelItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp" />
+
+                <TextView
+                    android:id="@+id/budget"
+                    style="@style/TextAppearance.LabelItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp" />
+
+                <TextView
+                    android:id="@+id/revenue"
+                    style="@style/TextAppearance.LabelItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="4dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

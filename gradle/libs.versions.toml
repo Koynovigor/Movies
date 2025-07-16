@@ -16,6 +16,7 @@ hilt = "2.56.2"
 ksp = "2.2.0-2.0.2"
 coroutines = "1.10.2"
 kotlinxSerializationJson = "1.9.0"
+palette = "1.0.0"
 recyclerview = "1.4.0"
 retrofit = "3.0.0"
 okhttp = "5.1.0"
@@ -29,6 +30,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-palette = { module = "androidx.palette:palette", version.ref = "palette" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }

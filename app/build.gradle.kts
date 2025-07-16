@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.gms.ads)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.palette)
 
     // Room
     implementation(libs.androidx.room.runtime)

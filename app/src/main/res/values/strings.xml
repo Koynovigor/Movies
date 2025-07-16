@@ -7,6 +7,8 @@
     <string name="retry">Повторить</string>
     <string name="unexpected_error">Unexpected error</string>
     <string name="movie_poster">Постер</string>
+    <string name="back">Back</string>
+    <string name="empty">"???"</string>
 
     <string name="error_no_internet">Нет подключения к интернету</string>
     <string name="error_timeout">Превышено время ожидания ответа от сервера</string>
@@ -15,6 +17,6 @@
     <string name="minutes_format">%1$d мин.</string>
     <string name="original_title_format">Оригинальное название: %1$s</string>
     <string name="status_format">Статус: %1$s</string>
-    <string name="budget_format">Бюджет: $%1$d</string>
-    <string name="revenue_format">Сборы: $%1$d</string>
+    <string name="budget_format">Бюджет: $%1$s</string>
+    <string name="revenue_format">Сборы: $%1$s</string>
 </resources>

@@ -25,4 +25,8 @@
     <color name="surface">#FF000000</color>
     <color name="onSurface">#FFFFD600</color>
     <color name="outline">#80FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorSurfaceVariant">#F0F0F0</color>
+    <color name="colorOutline">#79747E</color>
+    <color name="colorPrimaryContainer">?attr/colorPrimaryContainer</color>
 </resources>
