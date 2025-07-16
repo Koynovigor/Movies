@@ -35,8 +35,8 @@ android {
         applicationId = "com.l3on1kl.movies"
         minSdk = 28
         targetSdk = 36
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -126,4 +126,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.mockito.core)
+    implementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.core.testing)
+    implementation(libs.androidx.espresso.contrib)
 }

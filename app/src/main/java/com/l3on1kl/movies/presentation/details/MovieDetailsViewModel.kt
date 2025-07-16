@@ -21,21 +21,39 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieDetails: GetMovieDetailsUseCase
 ) : AndroidViewModel(app) {
 
-    private val movieId: Long = checkNotNull(savedStateHandle["movieId"]) {
-        "movieId is required"
-    }
+    private val movieId: Long? = savedStateHandle["movieId"]
 
     private val _state = MutableStateFlow<DetailsUiState>(DetailsUiState.Loading)
     val state: StateFlow<DetailsUiState> = _state.asStateFlow()
 
     init {
-        load()
+        if (movieId == null) {
+            _state.value = DetailsUiState.Error(
+                ErrorMapper.map(
+                    IllegalArgumentException("movieId is required"),
+                    app
+                )
+            )
+        } else {
+            load()
+        }
     }
 
     fun load() {
         viewModelScope.launch {
+            val id = movieId
+            if (id == null) {
+                _state.value = DetailsUiState.Error(
+                    ErrorMapper.map(
+                        IllegalArgumentException("movieId is required"),
+                        app
+                    )
+                )
+                return@launch
+            }
+
             _state.value = DetailsUiState.Loading
-            getMovieDetails(movieId)
+            getMovieDetails(id)
                 .catch { error ->
                     _state.value = DetailsUiState.Error(
                         ErrorMapper.map(
@@ -45,7 +63,16 @@ class MovieDetailsViewModel @Inject constructor(
                     )
                 }
                 .collect { movie ->
-                    _state.value = DetailsUiState.Success(movie)
+                    if (movie.title.isBlank()) {
+                        _state.value = DetailsUiState.Error(
+                            ErrorMapper.map(
+                                IllegalStateException("Empty movie"),
+                                app
+                            )
+                        )
+                    } else {
+                        _state.value = DetailsUiState.Success(movie)
+                    }
                 }
         }
     }
