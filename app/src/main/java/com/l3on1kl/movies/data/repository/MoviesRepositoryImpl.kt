@@ -16,7 +16,6 @@ import com.l3on1kl.movies.util.NetworkMonitor
 import com.l3on1kl.movies.util.TmdbConfigHolder
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.cancellation.CancellationException
@@ -53,26 +52,24 @@ class MoviesRepositoryImpl @Inject constructor(
                 api.getGenres(BuildConfig.TMDB_API_KEY)
             }
                 .onSuccess { result ->
-                    val categories = result.genres.map {
-                        MovieCategory(
-                            it.id,
-                            it.name.replaceFirstChar { char ->
-                                if (char.isLowerCase()) {
-                                    char.titlecase(Locale.getDefault())
-                                } else {
-                                    char.toString()
-                                }
-                            }
-                        )
-                    }
-
-                    categoryDao.replaceAll(
-                        categories.map {
-                            CategoryEntity(
+                    val categories = result.genres
+                        .sortedBy { it.id }
+                        .map {
+                            MovieCategory(
                                 it.id,
-                                it.title
+                                it.name
                             )
                         }
+
+                    categoryDao.replaceAll(
+                        result.genres
+                            .sortedBy { it.id }
+                            .map {
+                                CategoryEntity(
+                                    it.id,
+                                    it.name
+                                )
+                            }
                     )
                     emit(categories)
                 }
@@ -98,12 +95,14 @@ class MoviesRepositoryImpl @Inject constructor(
             val cached = categoryDao.getAll()
             if (cached.isNotEmpty()) {
                 emit(
-                    cached.map {
-                        MovieCategory(
-                            it.id,
-                            it.name
-                        )
-                    }
+                    cached
+                        .sortedBy { it.id }
+                        .map {
+                            MovieCategory(
+                                it.id,
+                                it.name
+                            )
+                        }
                 )
             } else {
                 throw java.io.IOException("No network and no cache")

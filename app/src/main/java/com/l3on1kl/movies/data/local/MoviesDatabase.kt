@@ -15,7 +15,7 @@ import com.l3on1kl.movies.data.local.entity.MovieEntity
         CategoryEntity::class,
         MovieDetailsEntity::class
     ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class MoviesDatabase : RoomDatabase() {
