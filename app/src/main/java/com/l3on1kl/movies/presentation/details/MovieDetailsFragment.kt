@@ -54,7 +54,7 @@ class MovieDetailsFragment : Fragment() {
     ) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.setNavigationOnClickListener {
+        binding.backChip.setOnClickListener {
             findNavController().navigateUp()
         }
 
