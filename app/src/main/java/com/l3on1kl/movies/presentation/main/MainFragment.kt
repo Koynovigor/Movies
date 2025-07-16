@@ -27,6 +27,7 @@ class MainFragment : Fragment() {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = requireNotNull(_binding)
     private val viewModel by activityViewModels<MainViewModel>()
+    private var snackbar: Snackbar? = null
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
@@ -101,7 +102,10 @@ class MainFragment : Fragment() {
                     .drop(1)
                     .collect { online ->
                         if (online) {
+                            hideError()
                             viewModel.refresh()
+                        } else {
+                            showError(getString(R.string.error_no_internet))
                         }
                     }
             }
@@ -126,6 +130,7 @@ class MainFragment : Fragment() {
         recyclerView.visibility = View.VISIBLE
         adView.visibility = View.VISIBLE
         categoryAdapter.submitList(state.categories)
+        hideError()
     }
 
     private fun setError(
@@ -140,9 +145,14 @@ class MainFragment : Fragment() {
             if (categoryAdapter.itemCount > 0) View.VISIBLE
             else View.GONE
 
-        Snackbar.make(
-            root,
-            errorMessage,
+        showError(errorMessage)
+    }
+
+    private fun showError(message: String) {
+        snackbar?.dismiss()
+        snackbar = Snackbar.make(
+            binding.root,
+            message,
             Snackbar.LENGTH_INDEFINITE
         ).setAction(R.string.retry) {
             viewModel.refresh()
@@ -151,6 +161,12 @@ class MainFragment : Fragment() {
                 requireContext(),
                 R.color.textSecondary
             )
-        ).show()
+        )
+        snackbar?.show()
+    }
+
+    private fun hideError() {
+        snackbar?.dismiss()
+        snackbar = null
     }
 }

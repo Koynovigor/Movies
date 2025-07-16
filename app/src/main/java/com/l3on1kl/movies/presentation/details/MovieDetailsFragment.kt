@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
@@ -46,6 +47,7 @@ class MovieDetailsFragment : Fragment() {
     private val binding get() = requireNotNull(_binding)
     private val viewModel by viewModels<MovieDetailsViewModel>()
     private val args by navArgs<MovieDetailsFragmentArgs>()
+    private var snackbar: Snackbar? = null
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
@@ -104,7 +106,12 @@ class MovieDetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 networkMonitor.isOnline.drop(1).collect { online ->
-                    if (online) viewModel.load()
+                    if (online) {
+                        hideError()
+                        viewModel.load()
+                    } else {
+                        showError(getString(R.string.error_no_internet))
+                    }
                 }
             }
         }
@@ -137,13 +144,7 @@ class MovieDetailsFragment : Fragment() {
         showPlaceholders()
         startPostponedEnterTransition()
 
-        Snackbar.make(
-            root,
-            message,
-            Snackbar.LENGTH_INDEFINITE
-        ).setAction(R.string.retry) {
-            viewModel.load()
-        }.show()
+        showError(message)
     }
 
     private fun setData(
@@ -153,6 +154,8 @@ class MovieDetailsFragment : Fragment() {
         scrollContent.visibility = View.VISIBLE
         ratingChip.visibility = View.VISIBLE
         backdrop.visibility = View.VISIBLE
+
+        hideError()
 
         title.text = movie.title
         tagline.text = movie.tagline
@@ -321,7 +324,7 @@ class MovieDetailsFragment : Fragment() {
             view.layoutParams.height =
                 resources.getDimensionPixelSize(R.dimen.placeholder_height)
             (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let { lp ->
-                lp.bottomMargin = verticalSpacing
+                lp.topMargin = verticalSpacing
                 view.layoutParams = lp
             }
         }
@@ -366,11 +369,33 @@ class MovieDetailsFragment : Fragment() {
             view.background = null
             view.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
             (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let { lp ->
-                lp.bottomMargin = 0
+                lp.topMargin = 0
                 view.layoutParams = lp
             }
         }
         infoGroup.removeAllViews()
         genresGroup.removeAllViews()
+    }
+
+    private fun showError(message: String) {
+        snackbar?.dismiss()
+        snackbar = Snackbar.make(
+            binding.root,
+            message,
+            Snackbar.LENGTH_INDEFINITE
+        ).setAction(R.string.retry) {
+            viewModel.load()
+        }.setActionTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.textSecondary
+            )
+        )
+        snackbar?.show()
+    }
+
+    private fun hideError() {
+        snackbar?.dismiss()
+        snackbar = null
     }
 }
