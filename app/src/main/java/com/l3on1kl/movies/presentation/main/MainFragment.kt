@@ -37,7 +37,10 @@ class MainFragment : Fragment() {
         },
         onMovieClick = { movie ->
             val action = MainFragmentDirections.actionMainToDetails(movie.id)
-            findNavController().navigate(action)
+            val navController = findNavController()
+            if (navController.currentDestination?.id == R.id.mainFragment) {
+                navController.navigate(action)
+            }
         }
     )
 
@@ -94,15 +97,13 @@ class MainFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                networkMonitor.isOnline.collect { online ->
-                    networkMonitor.isOnline
-                        .drop(1)
-                        .collect { online ->
-                            if (online) {
-                                viewModel.refresh()
-                            }
+                networkMonitor.isOnline
+                    .drop(1)
+                    .collect { online ->
+                        if (online) {
+                            viewModel.refresh()
                         }
-                }
+                    }
             }
         }
     }

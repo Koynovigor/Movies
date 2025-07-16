@@ -118,16 +118,25 @@ class MovieDetailsFragment : Fragment() {
     private fun setLoading() = with(binding) {
         progressBar.visibility = View.VISIBLE
         scrollContent.visibility = View.GONE
-        backdrop.visibility = View.GONE
+        scrollContent.visibility = View.VISIBLE
         ratingChip.visibility = View.GONE
+        backdrop.visibility = View.VISIBLE
+        backdrop.setImageResource(R.drawable.ic_poster_placeholder)
+        showPlaceholders()
+        startPostponedEnterTransition()
     }
 
     private fun setError(
         message: String
     ) = with(binding) {
         progressBar.visibility = View.GONE
-        scrollContent.visibility = View.GONE
+        scrollContent.visibility = View.VISIBLE
         ratingChip.visibility = View.GONE
+        backdrop.visibility = View.VISIBLE
+        backdrop.setImageResource(R.drawable.ic_poster_placeholder)
+        showPlaceholders()
+        startPostponedEnterTransition()
+
         Snackbar.make(
             root,
             message,
@@ -148,6 +157,7 @@ class MovieDetailsFragment : Fragment() {
         title.text = movie.title
         tagline.text = movie.tagline
         overview.text = movie.overview
+        clearPlaceholders()
 
         val releaseDate = movie.releaseDate.let {
             try {
@@ -288,5 +298,79 @@ class MovieDetailsFragment : Fragment() {
             })
             .centerCrop()
             .into(backdrop)
+    }
+
+    private fun showPlaceholders() = with(binding) {
+        val textViews = listOf(
+            title,
+            tagline,
+            overview,
+            originalTitle,
+            status,
+            budget,
+            revenue
+        )
+
+        val verticalSpacing = resources.getDimensionPixelSize(
+            R.dimen.placeholder_vertical_spacing
+        )
+
+        textViews.forEach { view ->
+            view.text = ""
+            view.setBackgroundResource(R.drawable.placeholder_rect)
+            view.layoutParams.height =
+                resources.getDimensionPixelSize(R.dimen.placeholder_height)
+            (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let { lp ->
+                lp.bottomMargin = verticalSpacing
+                view.layoutParams = lp
+            }
+        }
+
+        infoGroup.removeAllViews()
+        genresGroup.removeAllViews()
+
+        repeat(2) {
+            infoGroup.addView(createPlaceholderChip())
+            genresGroup.addView(createPlaceholderChip())
+        }
+    }
+
+    private fun createPlaceholderChip(): Chip = Chip(requireContext()).apply {
+        text = ""
+        isClickable = false
+        isCheckable = false
+        setChipBackgroundColorResource(R.color.colorOutline)
+
+        val width = resources.getDimensionPixelSize(
+            R.dimen.placeholder_chip_width
+        )
+
+        val height = resources.getDimensionPixelSize(
+            R.dimen.placeholder_chip_height
+        )
+
+        layoutParams = ViewGroup.LayoutParams(width, height)
+    }
+
+    private fun clearPlaceholders() = with(binding) {
+        val textViews = listOf(
+            title,
+            tagline,
+            overview,
+            originalTitle,
+            status,
+            budget,
+            revenue
+        )
+        textViews.forEach { view ->
+            view.background = null
+            view.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            (view.layoutParams as? ViewGroup.MarginLayoutParams)?.let { lp ->
+                lp.bottomMargin = 0
+                view.layoutParams = lp
+            }
+        }
+        infoGroup.removeAllViews()
+        genresGroup.removeAllViews()
     }
 }
